@@ -52,41 +52,41 @@ void TestG() {
 	assert(!sp12.unique());
 
 
-	//-	Destruktor	G
-	//It will test itself
-	//-	Tilldelning från en	
-	//	o	En SharedPtr	G
-	sp14 = sp12;
-	assert(sp14);
+	////-	Destruktor	G
+	////It will test itself
+	////-	Tilldelning från en	
+	////	o	En SharedPtr	G
+	//sp14 = sp12;
+	//assert(sp14);
 
-	sp14 = sp14;
-	assert(sp14);
+	//sp14 = sp14;
+	//assert(sp14);
 
-	//-	Jämförelse med (== och <)
-	SharedPtr<C> sp31(new C(31));
-	//	o	En SharedPtr	G
-	assert(sp11 == nullptr);
-	assert(sp11 < sp12);
-	assert(!(sp12 < sp11));
-	assert(sp14 == sp12);
-	assert(!(sp14 == sp31));
-	assert((sp14 < sp31) || (sp31 < sp14));
+	////-	Jämförelse med (== och <)
+	//SharedPtr<C> sp31(new C(31));
+	////	o	En SharedPtr	G
+	//assert(sp11 == nullptr);
+	//assert(sp11 < sp12);
+	//assert(!(sp12 < sp11));
+	//assert(sp14 == sp12);
+	//assert(!(sp14 == sp31));
+	//assert((sp14 < sp31) || (sp31 < sp14));
 
-	//get, * och ->
+	////get, * och ->
 
-	SharedPtr<C> sp41(new C(41));
-	SharedPtr<C> sp42(new C(42));
-	assert((sp41->value) == (sp41.get()->value));
-	assert((sp41->value) != (sp42.get()->value));
-	assert(&(*sp41) == (sp41.get()));
+	//SharedPtr<C> sp41(new C(41));
+	//SharedPtr<C> sp42(new C(42));
+	//assert((sp41->value) == (sp41.get()->value));
+	//assert((sp41->value) != (sp42.get()->value));
+	//assert(&(*sp41) == (sp41.get()));
 
-	//move
-	SharedPtr<C> sp51(std::move(sp41));
-	assert(sp51->value == 41);
-	assert(!sp41);
+	////move
+	//SharedPtr<C> sp51(std::move(sp41));
+	//assert(sp51->value == 41);
+	//assert(!sp41);
 
-	sp51.reset();
-	assert(!sp51);
+	//sp51.reset();
+	//assert(!sp51);
 }
 
 
