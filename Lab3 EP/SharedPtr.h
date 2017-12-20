@@ -1,5 +1,16 @@
 #pragma once
-
+//#include <vector>
+//
+//template <class OBJ> 
+//class ObjContainer {
+//	std::vector<OBJ*> a;
+//
+//public:
+//	void add(OBJ* obj) {
+//		a.push_back(obj);  // call vector's standard method.
+//	}
+//	friend class SharedPtr;
+//};
 template <class T>
 class SharedPtr
 {
@@ -31,18 +42,31 @@ public:
 		clear();
 	}
 
+	
+
 	template <typename Other>
-	SharedPtr<Other> operator== (SharedPtr<Other> &rhs)
+	bool operator==(const SharedPtr<Other>& rhs)
 	{
-		 if (rhs->pointer == nullptr)
-		 {
-			 return false;
-		 }
-		return true;
+		return pointer == rhs.pointer;
 	}
 
-	operator bool() const { return pointer != nullptr; }
+	template <typename Other>
+	bool operator== (const Other& rhs) 
+	{ 
+		return pointer == nullptr; 
+	}
 
+	template <typename Other>
+	friend bool operator< (const SharedPtr<T>& lhs, const SharedPtr<Other>& rhs)
+	{
+		return lhs.pointer < rhs.pointer;
+	}
+
+	operator bool() const 
+	{ 
+		return pointer != nullptr; 
+	}
+	
 	bool unique() const
 	{
 		return *refs == 1;
@@ -74,7 +98,14 @@ public:
 		return *this;
 	}
 
-	template <typename Other>
+	//template <typename Other>
+	T* get() const { return pointer; }
+
+	T& operator*() const { return *pointer; }
+	
+	T* operator->() const { return &*pointer; }
+
+	/*template <typename Other>
 	Other operator *()
 	{
 		return *pointer;
@@ -95,6 +126,6 @@ public:
 	std::size_t getCounts()
 	{
 		return *refs;
-	}
+	}*/
 
 };
