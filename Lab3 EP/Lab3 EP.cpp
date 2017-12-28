@@ -81,12 +81,12 @@ void TestG() {
 	assert(&(*sp41) == (sp41.get()));
 
 	////move
-	//SharedPtr<C> sp51(std::move(sp41));
-	//assert(sp51->value == 41);
-	//assert(!sp41);
+	SharedPtr<C> sp51(std::move(sp41));
+	assert(sp51->value == 41);
+	assert(!sp41);
 
-	//sp51.reset();
-	//assert(!sp51);
+	sp51.reset();
+	assert(!sp51);
 }
 
 

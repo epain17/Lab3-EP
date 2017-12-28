@@ -37,12 +37,21 @@ public:
 		++*refs;
 	}
 
+	SharedPtr(SharedPtr<T>&& other)
+		: pointer(other.pointer), refs(other.refs)
+	{
+		other.pointer = nullptr;
+	}
+
 	~SharedPtr()
 	{
 		clear();
 	}
 
-	
+	void reset()
+	{
+		pointer = nullptr;
+	}
 
 	template <typename Other>
 	bool operator==(const SharedPtr<Other>& rhs)
@@ -51,9 +60,9 @@ public:
 	}
 
 	template <typename Other>
-	bool operator== (const Other& rhs) 
-	{ 
-		return pointer == nullptr; 
+	bool operator== (const Other& rhs)
+	{
+		return pointer == nullptr;
 	}
 
 	template <typename Other>
@@ -62,18 +71,18 @@ public:
 		return lhs.pointer < rhs.pointer;
 	}
 
-	operator bool() const 
-	{ 
-		return pointer != nullptr; 
+	operator bool() const
+	{
+		return pointer != nullptr;
 	}
-	
+
 	bool unique() const
 	{
 		return *refs == 1;
 	}
-	
+
 	template <typename Other>
-	SharedPtr<Other> operator=(const SharedPtr<Other>& other)
+	SharedPtr<Other>& operator=(SharedPtr<Other>& other)
 	{
 		if (this != &other)
 		{
@@ -87,11 +96,26 @@ public:
 	}
 
 	template <typename Other>
+	SharedPtr<Other>& operator=(SharedPtr<Other>&& other)
+	{
+
+
+		pointer = other.pointer;
+		refs = other.refs;
+		other.pointer = nullptr;
+
+
+		return *this;
+	}
+
+
+
+	template <typename Other>
 	SharedPtr<Other> operator=(Other* p)
 	{
 		if (pointer != p)
 		{
-			pointer = p; 
+			pointer = p;
 			*refs = 1;
 		}
 
@@ -101,8 +125,8 @@ public:
 	//template <typename Other>
 	T* get() const { return pointer; }
 
-	T& operator*() const { return *pointer; }
-	
+	const T& operator*() const { return *pointer; }
+
 	T* operator->() const { return &*pointer; }
 
 	/*template <typename Other>
