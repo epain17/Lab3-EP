@@ -87,6 +87,7 @@ void TestG() {
 
 	sp51.reset();
 	assert(!sp51);
+
 }
 
 

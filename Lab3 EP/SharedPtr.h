@@ -1,16 +1,5 @@
 #pragma once
-//#include <vector>
-//
-//template <class OBJ> 
-//class ObjContainer {
-//	std::vector<OBJ*> a;
-//
-//public:
-//	void add(OBJ* obj) {
-//		a.push_back(obj);  // call vector's standard method.
-//	}
-//	friend class SharedPtr;
-//};
+
 template <class T>
 class SharedPtr
 {
@@ -20,10 +9,23 @@ class SharedPtr
 
 	void clear()
 	{
-		if (!--*refs)
+		/*	if (!--*refs)
+			{
+
+
+				delete pointer;
+				delete refs;
+
+			}*/
+
+		if (refs != nullptr)
 		{
-			delete pointer;
-			delete refs;
+			(*refs)--;
+			if (*refs == 0)
+			{
+				delete pointer;
+				delete refs;
+			}
 		}
 	}
 
@@ -40,7 +42,9 @@ public:
 	SharedPtr(SharedPtr<T>&& other)
 		: pointer(other.pointer), refs(other.refs)
 	{
+
 		other.pointer = nullptr;
+		other.refs = new std::size_t(1);
 	}
 
 	~SharedPtr()
@@ -50,7 +54,19 @@ public:
 
 	void reset()
 	{
-		pointer = nullptr;
+		if (refs != nullptr)
+		{
+			(*refs)--;
+
+			if (*refs == 0)
+			{
+				delete pointer;
+				delete refs;
+			}
+
+			refs = nullptr;
+			pointer = nullptr;
+		}
 	}
 
 	template <typename Other>
