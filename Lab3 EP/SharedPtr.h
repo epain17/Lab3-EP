@@ -11,14 +11,6 @@ class SharedPtr
 
 	void clear()
 	{
-		/*	if (!--*refs)
-			{
-
-
-				delete pointer;
-				delete refs;
-
-			}*/
 
 		if (refs != nullptr)
 		{
@@ -78,12 +70,20 @@ public:
 	template <typename Other>
 	bool operator==(const SharedPtr<Other>& rhs)
 	{
+		if (rhs.pointer == nullptr)
+		{
+			return true;
+		}
 		return pointer == rhs.pointer;
 	}
 
 	template <typename Other>
 	bool operator== (const Other& rhs)
 	{
+		if (rhs == nullptr)
+		{
+			return true;
+		}
 		return pointer == nullptr;
 	}
 

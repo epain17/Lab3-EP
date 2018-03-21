@@ -1,6 +1,4 @@
-﻿  Skipping... (no relevant changes detected)
-  stdafx.cpp
-  Lab3 EP.cpp
-c:\users\emil\documents\github\lab3 ep\lab3 ep\sharedptr.h(107): warning C4715: 'SharedPtr<C>::unique': not all control paths return a value
-  Lab3 EP.vcxproj -> C:\Users\Emil\Documents\GitHub\Lab3 EP\Debug\Lab3 EP.exe
-  Lab3 EP.vcxproj -> C:\Users\Emil\Documents\GitHub\Lab3 EP\Debug\Lab3 EP.pdb (Full PDB)
+﻿  Lab3 EP.cpp
+c:\users\emil\documents\github\lab3-ep\lab3 ep\sharedptr.h(107): warning C4715: 'SharedPtr<C>::unique': not all control paths return a value
+  Lab3 EP.vcxproj -> C:\Users\Emil\Documents\GitHub\Lab3-EP\Debug\Lab3 EP.exe
+  Lab3 EP.vcxproj -> C:\Users\Emil\Documents\GitHub\Lab3-EP\Debug\Lab3 EP.pdb (Full PDB)
