@@ -1,4 +1,6 @@
 #pragma once
+#include <assert.h>
+
 
 template <class T>
 class SharedPtr
@@ -43,8 +45,10 @@ public:
 		: pointer(other.pointer), refs(other.refs)
 	{
 
-		other.pointer = nullptr;
-		other.refs = new std::size_t(1);
+		/*other.pointer = nullptr;
+		other.refs = new std::size_t(1);*/
+		++*refs;
+		other.reset();
 	}
 
 	~SharedPtr()
@@ -54,7 +58,8 @@ public:
 
 	void reset()
 	{
-		if (refs != nullptr)
+		assert(Invariant());
+		if (pointer != nullptr || refs != nullptr)
 		{
 			(*refs)--;
 
@@ -67,6 +72,7 @@ public:
 			refs = nullptr;
 			pointer = nullptr;
 		}
+		assert(Invariant());
 	}
 
 	template <typename Other>
@@ -94,19 +100,25 @@ public:
 
 	bool unique() const
 	{
-		return *refs == 1;
+		if (pointer != nullptr)
+		{
+			return *refs == 1;
+		}
 	}
 
 	template <typename Other>
 	SharedPtr<Other>& operator=(SharedPtr<Other>& other)
 	{
-		if (this != &other)
+		assert(Invariant());
+		if (this != &other && pointer != nullptr)
 		{
 			clear();
 			pointer = other.pointer;
 			refs = other.refs;
 			++*refs;
+
 		}
+		assert(Invariant());
 
 		return *this;
 	}
@@ -114,58 +126,43 @@ public:
 	template <typename Other>
 	SharedPtr<Other>& operator=(SharedPtr<Other>&& other)
 	{
-
-
-		pointer = other.pointer;
-		refs = other.refs;
-		other.pointer = nullptr;
-
+		assert(Invariant());
+		if (pointer != nullptr)
+		{
+			pointer = other.pointer;
+			refs = other.refs;
+			other.pointer = nullptr;
+			other.reset();
+		}
+		assert(Invariant());
 
 		return *this;
 	}
-
-
 
 	template <typename Other>
 	SharedPtr<Other> operator=(Other* p)
 	{
 		if (pointer != p)
 		{
+			assert(Invariant());
+
 			pointer = p;
 			*refs = 1;
+			assert(Invariant());
+
 		}
 
 		return *this;
 	}
 
-	//template <typename Other>
 	T* get() const { return pointer; }
 
 	const T& operator*() const { return *pointer; }
 
 	T* operator->() const { return &*pointer; }
 
-	/*template <typename Other>
-	Other operator *()
-	{
-		return *pointer;
-	}
+	bool Invariant() { return !pointer || *refs > 0; }
 
-	template <typename Other>
-	const Other& operator *() const
-	{
-		return *pointer;
-	}
 
-	template <typename Other>
-	Other* operator->() const
-	{
-		return pointer;
-	}
-
-	std::size_t getCounts()
-	{
-		return *refs;
-	}*/
 
 };
