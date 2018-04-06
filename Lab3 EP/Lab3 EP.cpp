@@ -88,6 +88,13 @@ void TestG() {
 	sp51.reset();
 	assert(!sp51);
 
+	//Kolla så att detta fungerar utan memory leaks
+	auto c1 = new C(1);
+	auto c2 = new C(2);
+	SharedPtr<C> sp52(c1);
+	sp52 = c2;
+
+
 }
 
 

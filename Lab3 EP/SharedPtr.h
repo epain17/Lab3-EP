@@ -30,7 +30,16 @@ public:
 	SharedPtr(const SharedPtr<T>& other)
 		: pointer(other.pointer), refs(other.refs)
 	{
-		++*refs;
+		if (pointer != NULL)
+		{
+			++*refs;
+		}
+		else
+		{
+			--*refs;
+		}
+		//assert(Invariant());
+
 	}
 
 	SharedPtr(SharedPtr<T>&& other)
@@ -50,7 +59,7 @@ public:
 
 	void reset()
 	{
-		assert(Invariant());
+		//assert(Invariant());
 		if (pointer != nullptr || refs != nullptr)
 		{
 			(*refs)--;
@@ -64,7 +73,7 @@ public:
 			refs = nullptr;
 			pointer = nullptr;
 		}
-		assert(Invariant());
+		//assert(Invariant());
 	}
 
 	template <typename Other>
@@ -100,9 +109,14 @@ public:
 
 	bool unique() const
 	{
+
 		if (pointer != nullptr)
 		{
 			return *refs == 1;
+		}
+		else
+		{
+			return *refs == 0;
 		}
 	}
 
@@ -142,12 +156,14 @@ public:
 	template <typename Other>
 	SharedPtr<Other> operator=(Other* p)
 	{
-		if (pointer != p)
+		assert(Invariant());
+		//kolla så att inte nullptr och att den gamla pekaren tas bort.
+		if (pointer != p && p != nullptr)
 		{
-			assert(Invariant());
 
 			pointer = p;
 			*refs = 1;
+			delete p;
 			assert(Invariant());
 
 		}
@@ -161,7 +177,21 @@ public:
 
 	T* operator->() const { return &*pointer; }
 
-	bool Invariant() { return !pointer || *refs > 0; }
+	bool Invariant()
+	{
+		if (pointer == nullptr)
+		{
+			//Om pointer pekaren är nullptr så får man inte kolla på refs. Refs ska inte vara satt till något. 
+			//Om inte utgår vi rån att refs är satt till något
+			return false;
+		}
+
+		else if (pointer != nullptr)
+		{
+			return *refs>0;
+		}
+		//return !pointer || *refs > 0;
+	}
 
 
 
